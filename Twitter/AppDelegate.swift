@@ -7,15 +7,20 @@
 //
 
 import UIKit
+import BDBOAuth1Manager
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-    var window: UIWindow?
+    var window: UIWindow? = UIWindow(frame: UIScreen.mainScreen().bounds)
 
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        
+        window!.rootViewController = LoginViewController()
+        window!.makeKeyAndVisible()
+        
         return true
     }
 
@@ -41,6 +46,51 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
+    func application(app: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -> Bool {
+        //print(url.description)
+        
+         let requestToken = BDBOAuth1Credential(queryString: url.query)
+        
+         let twitterClient = BDBOAuth1SessionManager(baseURL: NSURL(string: "https://api.twitter.com")!, consumerKey: "P7JEB0pyp1EXlyVIOHPrcCaYl", consumerSecret: "K3XYKTTZ90Gv6yRNbiqoLDgNcwCgX7IXlnZusCN1EZ88TRdCcq")
+        
+        twitterClient.fetchAccessTokenWithPath("oauth/access_token", method: "POST", requestToken: requestToken, success: { (accessToken: BDBOAuth1Credential!) in
+            print("access Token found")
+            
+            twitterClient.GET("1.1/account/verify_credentials.json", parameters: nil, progress: nil, success:
+                { (task:NSURLSessionDataTask, response:AnyObject?) in
+                    //print("account = \(response)")
+                    let user = response as! NSDictionary
+                    
+                    twitterClient.GET("1.1/statuses/home_timeline.json", parameters: nil, progress: nil, success: { (task:NSURLSessionDataTask, response: AnyObject?) in
+                        let homeTimeline = response as! [NSDictionary]
+                        print (homeTimeline)
+                        var tweets:[Tweet] = []
+                        
+                        for dict in homeTimeline
+                        {
+                            tweets.append(Tweet.init(dictionary: dict))
+                        }
+                        
+                       let feed = FeedViewController()
+                       feed.tweets = tweets
+                        
+                        app.keyWindow?.rootViewController?.presentViewController(feed, animated: true, completion: {print("new presented")})
+                        
+                        
+                    }) { (task: NSURLSessionDataTask?, error: NSError) in
+                        print ("home timeline error")
+                    }
+                    
+            }) { (tasl: NSURLSessionDataTask?, error: NSError) in
+                print("error - account not found")
+            }
+            
+        }) { (error: NSError!) in
+                print("error")
+        }
+        
+        return true
+    }
 
 }
 
