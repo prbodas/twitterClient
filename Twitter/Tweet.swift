@@ -14,8 +14,14 @@ class Tweet: NSObject {
     var timestamp = ""
     var user:User = User()
     
+    override init()
+    {
+        super.init()
+    }
+    
     init(dictionary:NSDictionary)
     {
+        super.init()
         text = dictionary["text"] as! String
         print(dictionary["user"])
 
