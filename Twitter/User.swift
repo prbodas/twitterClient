@@ -11,7 +11,7 @@ import UIKit
 class User: NSObject {
     
     var name = ""
-    var picture = ""
+    var pictureurl = ""
     var tagline = ""
     var numTweets = 0
     var numFollowing = 0
@@ -27,7 +27,7 @@ class User: NSObject {
         print ("INITDIC")
         print(dictionary)
         name = dictionary.valueForKey("screen_name") as! String
-        picture = dictionary.valueForKey("profile_image_url") as! String
+        pictureurl = dictionary.valueForKey("profile_image_url") as! String
         tagline = dictionary.valueForKey("description") as! String
         numTweets = dictionary.valueForKey("statuses_count") as! Int
         numFollowers = dictionary.valueForKey("followers_count") as! Int

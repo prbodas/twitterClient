@@ -74,7 +74,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                        let feed = FeedViewController()
                        feed.tweets = tweets
                         
-                        app.keyWindow?.rootViewController?.presentViewController(feed, animated: true, completion: {print("new presented")})
+                        let navctrl = UINavigationController(rootViewController: feed)
+                        
+                        app.keyWindow?.rootViewController?.presentViewController(navctrl, animated: true, completion: {print("new presented")})
                         
                         
                     }) { (task: NSURLSessionDataTask?, error: NSError) in

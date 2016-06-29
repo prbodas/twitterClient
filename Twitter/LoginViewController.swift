@@ -21,8 +21,8 @@ class LoginViewController: ViewController {
         
         //add views to parent
         view.addSubview(logoDisplay)
-        view.addSubview(userField)
-        view.addSubview(passField)
+        //view.addSubview(userField)
+        //view.addSubview(passField)
         view.addSubview(loginButton)
         
         //set parent properties
@@ -99,9 +99,9 @@ class LoginViewController: ViewController {
         NSLayoutConstraint(item: logoDisplay, attribute: .Height, relatedBy: .Equal, toItem: view, attribute: .Height, multiplier: 0.25, constant: 0.0).active = true
         
         //defines how wide the text fields are in relation to the parent view
-        let field_width_multiplier:CGFloat = 0.5
+        //let field_width_multiplier:CGFloat = 0.5
         
-        //USER FIELD LAYOUT
+        /*//USER FIELD LAYOUT
         
         //positions userField at top of parent view, offset by 30
         NSLayoutConstraint(item: userField, attribute: .Bottom, relatedBy: .GreaterThanOrEqual, toItem: view, attribute: .Bottom, multiplier: 0.45, constant: 0.0).active = true
@@ -127,7 +127,7 @@ class LoginViewController: ViewController {
         NSLayoutConstraint(item: passField, attribute: .CenterX, relatedBy: .Equal, toItem: view, attribute: .CenterX, multiplier: 1.0, constant: 0.0).active = true
         
         //sets height to 30pts
-        NSLayoutConstraint(item: passField, attribute: .Height, relatedBy: .Equal, toItem: view, attribute: .Height, multiplier: 0.0, constant: 30.0).active = true
+        NSLayoutConstraint(item: passField, attribute: .Height, relatedBy: .Equal, toItem: view, attribute: .Height, multiplier: 0.0, constant: 30.0).active = true*/
         
         //LOGIN BUTTON LAYOUT
         

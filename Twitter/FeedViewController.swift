@@ -43,9 +43,16 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell{
         let newcell = TweetCell()
-        newcell.tweetText.text = tweets[indexPath.row].text
+        newcell.setUpCell(tweets[indexPath.row])
+        //newcell.tweetText.text = tweets[indexPath.row].text
         return newcell
     }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let details:DetailViewController = DetailViewController()
+        details.tweet = tweets[indexPath.row]
+    }
+    
     
     func activateConstraints()
     {
