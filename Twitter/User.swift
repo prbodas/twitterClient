@@ -24,8 +24,8 @@ class User: NSObject {
     
     init(dictionary:NSDictionary)
     {
-        print ("INITDIC")
-        print(dictionary)
+        //print ("INITDIC")
+        //print(dictionary)
         name = dictionary.valueForKey("screen_name") as! String
         pictureurl = dictionary.valueForKey("profile_image_url") as! String
         tagline = dictionary.valueForKey("description") as! String

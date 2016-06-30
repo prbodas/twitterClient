@@ -18,6 +18,40 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         
+        if (NSUserDefaults.standardUserDefaults().objectForKey("current_user") == nil)
+        {
+            window!.rootViewController = LoginViewController()
+            window!.makeKeyAndVisible()
+        }else{
+            let twitterClient = TwitterCall.client
+            twitterClient.GET("1.1/statuses/home_timeline.json", parameters: nil, progress: nil, success: { (task:NSURLSessionDataTask, response: AnyObject?) in
+                let homeTimeline = response as! [NSDictionary]
+                print (homeTimeline)
+                var tweets:[Tweet] = []
+                
+                for dict in homeTimeline
+                {
+                    tweets.append(Tweet.init(dictionary: dict))
+                }
+                
+                let feed = FeedViewController()
+                feed.tweets = tweets
+                
+                let navctrl = UINavigationController(rootViewController: feed)
+                
+                self.window!.rootViewController = navctrl
+                self.window!.makeKeyAndVisible()
+                
+                
+            }) { (task: NSURLSessionDataTask?, error: NSError) in
+                print ("home timeline error")
+            }
+
+        }
+        
+        let userobj = try! NSJSONSerialization.JSONObjectWithData(NSUserDefaults.standardUserDefaults().objectForKey("current_user") as! NSData, options: [])
+        let currentuser = User.init(dictionary: userobj as! NSDictionary)
+        
         window!.rootViewController = LoginViewController()
         window!.makeKeyAndVisible()
         
@@ -51,7 +85,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
          let requestToken = BDBOAuth1Credential(queryString: url.query)
         
-         let twitterClient = BDBOAuth1SessionManager(baseURL: NSURL(string: "https://api.twitter.com")!, consumerKey: "P7JEB0pyp1EXlyVIOHPrcCaYl", consumerSecret: "K3XYKTTZ90Gv6yRNbiqoLDgNcwCgX7IXlnZusCN1EZ88TRdCcq")
+         let twitterClient = TwitterCall.client
         
         twitterClient.fetchAccessTokenWithPath("oauth/access_token", method: "POST", requestToken: requestToken, success: { (accessToken: BDBOAuth1Credential!) in
             print("access Token found")
@@ -60,6 +94,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 { (task:NSURLSessionDataTask, response:AnyObject?) in
                     //print("account = \(response)")
                     let user = response as! NSDictionary
+                    
+                    //let userobj = User.init(dictionary: user)
+                    let userdata = try! NSJSONSerialization.dataWithJSONObject(user, options: [])
+                    
+                    NSUserDefaults.standardUserDefaults().setObject(userdata, forKey: "current_user")
+                    NSUserDefaults.standardUserDefaults().synchronize()
                     
                     twitterClient.GET("1.1/statuses/home_timeline.json", parameters: nil, progress: nil, success: { (task:NSURLSessionDataTask, response: AnyObject?) in
                         let homeTimeline = response as! [NSDictionary]

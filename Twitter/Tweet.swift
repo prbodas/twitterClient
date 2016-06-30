@@ -13,6 +13,7 @@ class Tweet: NSObject {
     var text = ""
     var timestamp = ""
     var user:User = User()
+    var id:String = ""
     
     override init()
     {
@@ -27,6 +28,7 @@ class Tweet: NSObject {
 
         user = User(dictionary: dictionary["user"] as! NSDictionary)
         timestamp = dictionary["created_at"] as! String
+        id = dictionary["id_str"] as! String
     }
     
 }

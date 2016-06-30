@@ -35,15 +35,85 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
         //self.tableView.layoutIfNeeded()
         //tableView.reloadData()
         
+        let btn1 = UIButton()
+        btn1.setTitle("Profile", forState: .Normal)
+        btn1.setTitleColor(UIColor.blueColor(), forState: .Normal)
+        btn1.frame = CGRectMake(0, 0, 100, 30)
+        btn1.addTarget(self, action: Selector("toProfile"), forControlEvents: .TouchUpInside)
+        let item1 = UIBarButtonItem()
+        item1.customView = btn1
+        
+        let btn2 = UIButton()
+        btn2.setTitle("Compose", forState: .Normal)
+        btn2.setTitleColor(UIColor.blueColor(), forState: .Normal)
+        btn2.frame = CGRectMake(0, 0, 100, 30)
+        btn2.addTarget(self, action: Selector("toCompose"), forControlEvents: .TouchUpInside)
+        let item2 = UIBarButtonItem()
+        item2.customView = btn2
+        
+        
+        self.navigationItem.leftBarButtonItems = [item1]
+        self.navigationItem.rightBarButtonItems = [item2]
+        
+        //add refresh pull
+        let refreshControl = UIRefreshControl()
+         refreshControl.addTarget(self, action: #selector(refreshControlAction(_:)), forControlEvents: UIControlEvents.ValueChanged)
+        tableView.insertSubview(refreshControl, atIndex: 0)
+        
+    }
+    
+    func refreshControlAction(refreshControl: UIRefreshControl) {
+        
+        // ... Create the NSURLRequest (myRequest) ...
+        
+        // Configure session so that completion handler is executed on main UI thread
+        let twitterClient = TwitterCall.client
+        twitterClient.GET("1.1/statuses/home_timeline.json", parameters: nil, progress: nil, success: { (task:NSURLSessionDataTask, response: AnyObject?) in
+            let homeTimeline = response as! [NSDictionary]
+            print (homeTimeline)
+            var tweets:[Tweet] = []
+            
+            for dict in homeTimeline
+            {
+                tweets.append(Tweet.init(dictionary: dict))
+            }
+            
+            self.tweets = tweets
+            self.tableView.reloadData()
+            refreshControl.endRefreshing()
+            
+            //let navctrl = UINavigationController(rootViewController: feed)
+            
+            //app.keyWindow?.rootViewController?.presentViewController(navctrl, animated: true, completion: {print("new presented")})
+            
+            
+        }) { (task: NSURLSessionDataTask?, error: NSError) in
+            print ("home timeline error")
+        }
+    }
+    
+    func toCompose()
+    {
+        let compose:ComposeViewController = ComposeViewController()
+        self.navigationController?.pushViewController(compose, animated: true)
+    }
+    
+    func toProfile()
+    {
+        let profile:ProfileViewController = ProfileViewController()
+        let userobj = try! NSJSONSerialization.JSONObjectWithData(NSUserDefaults.standardUserDefaults().objectForKey("current_user") as! NSData, options: [])
+        let currentuser = User.init(dictionary: userobj as! NSDictionary)
+        profile.user = currentuser
+        self.navigationController?.pushViewController(profile, animated: true)
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 20
+        return 19
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell{
         let newcell = TweetCell()
-        newcell.setUpCell(tweets[indexPath.row])
+        newcell.setUpCell(tweets[indexPath.row], viewcon: self)
         //newcell.tweetText.text = tweets[indexPath.row].text
         return newcell
     }
@@ -51,6 +121,7 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let details:DetailViewController = DetailViewController()
         details.tweet = tweets[indexPath.row]
+        self.navigationController?.pushViewController(details, animated: true)
     }
     
     

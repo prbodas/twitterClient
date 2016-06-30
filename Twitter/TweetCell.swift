@@ -14,6 +14,8 @@ class TweetCell: UITableViewCell {
     var userPicture = UIImageView()
     var username = UILabel()
     var timeLabel = UILabel()
+    var user:User!
+    var viewcontroller = FeedViewController()
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -34,12 +36,16 @@ class TweetCell: UITableViewCell {
         
         //set userPicture values
         userPicture.backgroundColor = UIColor.brownColor()
+        userPicture.userInteractionEnabled = true
+        let newTap = UITapGestureRecognizer(target: self, action: #selector(TweetCell.toProfile))
+        userPicture.addGestureRecognizer(newTap)
         
         //add properties to superview
         self.addSubview(tweetText)
         self.addSubview(userPicture)
         self.addSubview(username)
         self.addSubview(timeLabel)
+        //self.addSubview(toProfileButton)
         
         Style.autoViews(self)
         
@@ -62,12 +68,61 @@ class TweetCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-    func setUpCell(tweet:Tweet)
+    func toProfile()
+    {
+        print("toprofile")
+        let profile = ProfileViewController()
+        profile.user = user
+        viewcontroller.navigationController?.pushViewController(profile, animated: true)
+
+    }
+    
+    func convertToDate(string: String) -> NSDate
+    {
+        let dateFor = NSDateFormatter()
+        dateFor.dateFormat = "E MMM d HH:mm:ss Z yyyy"
+        let nsDate = dateFor.dateFromString(string)
+        return nsDate!
+    }
+    
+    func convertDateToRelStr (date: NSDate) -> String
+    {
+        let dateFor = NSDateFormatter()
+        var str = ""
+        let interval = -1*(date.timeIntervalSinceNow as! Double)
+        if (interval>(24.0*60.0*60.0))
+        {
+            let days = interval/(24.0*60.0*60.0)
+            str = String(format: "%.0f days ago", days)
+            //str = "\(days) days ago"
+        }else if (interval > (60.0*60.0))
+        {
+            let hours = interval/(60.0*60.0)
+            str = String(format: "%.0f hours ago", hours)
+            //str = "\(hours) hours ago"
+        }else if (interval > (60.0))
+        {
+            let minutes = interval/60.0
+            str = String(format: "%.0f minutes ago", minutes)
+            //str = "\(minutes) minutes ago"
+        }else{
+            let seconds = interval
+            str = String(format: "%.0f seconds ago", seconds)
+            //str = "\(seconds) seconds ago"
+        }
+        return str
+    }
+    
+    
+    func setUpCell(tweet:Tweet, viewcon:FeedViewController)
     {
         tweetText.text = tweet.text
-        timeLabel.text = tweet.timestamp
+        timeLabel.text = self.convertDateToRelStr(self.convertToDate(tweet.timestamp))
+        //print("time = \(time)")
         username.text = tweet.user.name
         userPicture.setImageWithURL(NSURL(string: tweet.user.pictureurl)!)
+        user = tweet.user
+        viewcontroller = viewcon
     }
     
     
@@ -83,7 +138,7 @@ class TweetCell: UITableViewCell {
         
         NSLayoutConstraint(item: username, attribute: .Width, relatedBy: .Equal, toItem: tweetText, attribute: .Width, multiplier: 1.0, constant: 0.0).active = true
         
-        NSLayoutConstraint(item: username, attribute: .Height, relatedBy: .Equal, toItem: self, attribute: .Height, multiplier: 0.25, constant: 0.0).active = true
+        NSLayoutConstraint(item: username, attribute: .Height, relatedBy: .Equal, toItem: self, attribute: .Height, multiplier: 0.0, constant: 40.0).active = true
 
         
         //tweetText constraints
