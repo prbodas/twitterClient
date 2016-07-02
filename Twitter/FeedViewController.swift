@@ -17,6 +17,9 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //set view properties
+        view.backgroundColor = Style.colors["blue"]
+        
         //add subviews to main view
         view.addSubview(tableView)
         
@@ -31,13 +34,12 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.delegate = self
         tableView.dataSource = self
-        //self.tableView.setNeedsLayout()
-        //self.tableView.layoutIfNeeded()
-        //tableView.reloadData()
+        
         
         let btn1 = UIButton()
         btn1.setTitle("Profile", forState: .Normal)
-        btn1.setTitleColor(UIColor.blueColor(), forState: .Normal)
+        btn1.titleLabel?.font = Style.regFontHeader
+        btn1.setTitleColor(UIColor.blackColor(), forState: .Normal)
         btn1.frame = CGRectMake(0, 0, 100, 30)
         btn1.addTarget(self, action: Selector("toProfile"), forControlEvents: .TouchUpInside)
         let item1 = UIBarButtonItem()
@@ -45,7 +47,8 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
         
         let btn2 = UIButton()
         btn2.setTitle("Compose", forState: .Normal)
-        btn2.setTitleColor(UIColor.blueColor(), forState: .Normal)
+        btn2.titleLabel?.font = Style.regFontHeader
+        btn2.setTitleColor(UIColor.blackColor(), forState: .Normal)
         btn2.frame = CGRectMake(0, 0, 100, 30)
         btn2.addTarget(self, action: Selector("toCompose"), forControlEvents: .TouchUpInside)
         let item2 = UIBarButtonItem()

@@ -20,6 +20,9 @@ class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //view attr
+        view.backgroundColor = Style.colors["blue"]
+        
         //profilePic attributes
         profilePic.setImageWithURL(NSURL(string: user.pictureurl)!)
         
@@ -30,13 +33,13 @@ class ProfileViewController: UIViewController {
         
         //tagline
         tagline.text = user.tagline
-        tagline.backgroundColor = UIColor.orangeColor()
+        tagline.backgroundColor = UIColor.whiteColor()
         tagline.textAlignment = .Center
         
         //stats
         userStats.numberOfLines = 0
         userStats.text = " #Following: \(user.numFollowing) \n #Followers: \(user.numFollowers) \n #Tweets: \(user.numTweets)"
-        userStats.backgroundColor = UIColor.cyanColor()
+        userStats.backgroundColor = UIColor.whiteColor()
         userStats.textAlignment = .Center
         
         //add subviews

@@ -26,6 +26,9 @@ class DetailViewController: UIViewController, UIGestureRecognizerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //view params
+        view.backgroundColor = Style.colors["blue"]
+        
         //add views to super
         view.addSubview(nameLabel)
         view.addSubview(textLabel)
@@ -39,28 +42,32 @@ class DetailViewController: UIViewController, UIGestureRecognizerDelegate {
         
         //nameLabel properties
         nameLabel.text = tweet.user.name
+        nameLabel.textColor = UIColor.whiteColor()
         nameLabel.textAlignment = NSTextAlignment.Center
         nameLabel.adjustsFontSizeToFitWidth = true
-        nameLabel.backgroundColor = UIColor.cyanColor()
+        nameLabel.backgroundColor = UIColor.clearColor()
         
         //textLabel properties
         textLabel.numberOfLines = 0
         textLabel.text = tweet.text
-        textLabel.backgroundColor = UIColor.purpleColor()
+        textLabel.backgroundColor = UIColor.clearColor()
         
         //userPicView properties
         userPicView.setImageWithURL(NSURL(string: tweet.user.pictureurl)!)
         
         //retweetButton properties
-        retweetButton.backgroundColor = UIColor.redColor()
+        retweetButton.backgroundColor = UIColor.clearColor()
+        retweetButton.setBackgroundImage(UIImage(named: "retweet"), forState: .Normal)
         retweetButton.addTarget(self, action: #selector(DetailViewController.onRetweet), forControlEvents: UIControlEvents.TouchUpInside)
         
         //replyButton properties
-        replyButton.backgroundColor = UIColor.yellowColor()
+        replyButton.backgroundColor = UIColor.clearColor()
+        replyButton.setBackgroundImage(UIImage(named: "reply"), forState: .Normal)
         replyButton.addTarget(self, action: #selector(DetailViewController.onReply), forControlEvents: UIControlEvents.TouchUpInside)
         
         //favoriteButton properites
-        favoriteButton.backgroundColor = UIColor.greenColor()
+        favoriteButton.backgroundColor = UIColor.clearColor()
+        favoriteButton.setBackgroundImage(UIImage(named: "favorite"), forState: .Normal)
         favoriteButton.addTarget(self, action: #selector(DetailViewController.onFavorite), forControlEvents: UIControlEvents.TouchUpInside)
         
         //replyTextField properties
@@ -68,7 +75,7 @@ class DetailViewController: UIViewController, UIGestureRecognizerDelegate {
         replyTextView.text = "Reply here"
         
         //sendButton properties
-        sendButton.backgroundColor = UIColor.darkGrayColor()
+        sendButton.backgroundColor = UIColor.blackColor()
         sendButton.setTitle("Send", forState: UIControlState.Normal)
         sendButton.hidden = true
         sendButton.addTarget(self, action: #selector(DetailViewController.onSendText), forControlEvents: UIControlEvents.TouchUpInside)
@@ -133,6 +140,9 @@ class DetailViewController: UIViewController, UIGestureRecognizerDelegate {
         twitterClient.POST("1.1/statuses/update.json?status=\(message!)&in_reply_to_status_id=\(tweet.id)", parameters: nil , success: { (task: NSURLSessionDataTask, obj: AnyObject?) in
             print ("msg success")
             print(message)
+            self.replyTextView.hidden = true
+            self.sendButton.hidden = true
+            self.view.endEditing(true)
         }) { (task:NSURLSessionDataTask?, error:NSError) in
             print("msg failed")
             print(message)
@@ -199,7 +209,7 @@ class DetailViewController: UIViewController, UIGestureRecognizerDelegate {
         
         NSLayoutConstraint(item: retweetButton, attribute: .Height, relatedBy: .Equal, toItem: favoriteButton, attribute: .Width, multiplier: 1.0, constant: 0.0).active = true
         
-        NSLayoutConstraint(item: retweetButton, attribute: .Right, relatedBy: .Equal, toItem: favoriteButton, attribute: .Left, multiplier: 1.0, constant: 0.0).active = true
+        NSLayoutConstraint(item: retweetButton, attribute: .Right, relatedBy: .Equal, toItem: favoriteButton, attribute: .Left, multiplier: 1.0, constant: -10.0).active = true
         
         //reply button constraints
         
@@ -209,7 +219,7 @@ class DetailViewController: UIViewController, UIGestureRecognizerDelegate {
         
         NSLayoutConstraint(item: replyButton, attribute: .Height, relatedBy: .Equal, toItem: favoriteButton, attribute: .Width, multiplier: 1.0, constant: 0.0).active = true
         
-        NSLayoutConstraint(item: replyButton, attribute: .Left, relatedBy: .Equal, toItem: favoriteButton, attribute: .Right, multiplier: 1.0, constant: 0.0).active = true
+        NSLayoutConstraint(item: replyButton, attribute: .Left, relatedBy: .Equal, toItem: favoriteButton, attribute: .Right, multiplier: 1.0, constant: 10.0).active = true
         
         
         

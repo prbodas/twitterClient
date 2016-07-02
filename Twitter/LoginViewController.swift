@@ -26,10 +26,10 @@ class LoginViewController: ViewController {
         view.addSubview(loginButton)
         
         //set parent properties
-        view.backgroundColor = UIColor.whiteColor() //TO BE REPLACED BY STYLE SHEET
+        view.backgroundColor = Style.colors["beige"]
         
         //logoDisplay properties
-        logoDisplay.backgroundColor = UIColor.yellowColor()
+        logoDisplay.backgroundColor = Style.colors["blue"]
         logoDisplay.text = "Twitter"
         logoDisplay.textAlignment = NSTextAlignment.Center
         
@@ -40,7 +40,7 @@ class LoginViewController: ViewController {
         passField.backgroundColor = UIColor.redColor()
         
         //loginButton properties
-        loginButton.backgroundColor = UIColor.greenColor()
+        loginButton.backgroundColor = Style.colors["blue"]
         loginButton.setTitle("Log In", forState: UIControlState.Normal)
         loginButton.addTarget(self, action: #selector(LoginViewController.onLogin), forControlEvents: UIControlEvents.TouchUpInside)
         
@@ -132,7 +132,7 @@ class LoginViewController: ViewController {
         //LOGIN BUTTON LAYOUT
         
         //positions button y-wise on screen
-        NSLayoutConstraint(item: loginButton, attribute: .Bottom, relatedBy: .Equal, toItem: view, attribute: .Bottom, multiplier: 0.8, constant: 0.0).active = true
+        NSLayoutConstraint(item: loginButton, attribute: .CenterY, relatedBy: .Equal, toItem: view, attribute: .CenterY, multiplier: 1.0, constant: 0.0).active = true
         
         //makes button the same width as parent
         NSLayoutConstraint(item: loginButton, attribute: .Width, relatedBy: .Equal, toItem: view, attribute: .Width, multiplier: 1.0, constant: 0.0).active = true

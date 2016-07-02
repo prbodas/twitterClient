@@ -20,22 +20,30 @@ class TweetCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
+        //set self values
+        self.backgroundColor = Style.colors["blue"]
+        
         //set textLabel values
         tweetText.numberOfLines = 0
         tweetText.text = "Hello"
-        tweetText.backgroundColor = UIColor.redColor()
+        tweetText.backgroundColor = UIColor.clearColor()
         tweetText.textColor = UIColor.blackColor()
+        tweetText.font = Style.regFont
         
         //set username values
         username.text = "Hello"
-        username.backgroundColor = UIColor.greenColor()
+        username.backgroundColor = UIColor.clearColor()
+        username.textColor = UIColor.whiteColor()
+        username.font = Style.boldFont
+        //print("blue = \(Style.colors["blue"].)")
         
         //set timestamp values
         timeLabel.text = "hell"
-        timeLabel.backgroundColor = UIColor.yellowColor()
+        timeLabel.backgroundColor = UIColor.clearColor()
+        timeLabel.textColor = UIColor.grayColor()
         
         //set userPicture values
-        userPicture.backgroundColor = UIColor.brownColor()
+        userPicture.backgroundColor = UIColor.clearColor()
         userPicture.userInteractionEnabled = true
         let newTap = UITapGestureRecognizer(target: self, action: #selector(TweetCell.toProfile))
         userPicture.addGestureRecognizer(newTap)

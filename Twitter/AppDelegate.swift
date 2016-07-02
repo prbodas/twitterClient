@@ -49,8 +49,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         }
         
-        let userobj = try! NSJSONSerialization.JSONObjectWithData(NSUserDefaults.standardUserDefaults().objectForKey("current_user") as! NSData, options: [])
-        let currentuser = User.init(dictionary: userobj as! NSDictionary)
+        
+        //let userobj = try! NSJSONSerialization.JSONObjectWithData(NSUserDefaults.standardUserDefaults().objectForKey("current_user") as! NSData, options: [])
+        //let currentuser = User.init(dictionary: userobj as! NSDictionary)
         
         window!.rootViewController = LoginViewController()
         window!.makeKeyAndVisible()

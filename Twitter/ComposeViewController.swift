@@ -12,9 +12,19 @@ class ComposeViewController: UIViewController, UIGestureRecognizerDelegate {
     
     var tweetText = UITextView()
     var sendButton = UIButton()
+    var sentNotif = UIButton()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //view properties
+        view.backgroundColor = Style.colors["blue"]
+        
+        //sentNotif
+        sentNotif.setTitle("Sent!", forState: .Normal)
+        sentNotif.backgroundColor = Style.colors["green"]
+        sentNotif.addTarget(self, action: #selector(ComposeViewController.handleTap), forControlEvents: UIControlEvents.TouchUpInside)
+        sentNotif.hidden = true
         
         //tweetText
         tweetText.editable = true
@@ -22,12 +32,13 @@ class ComposeViewController: UIViewController, UIGestureRecognizerDelegate {
         
         //sendbutton
         sendButton.setTitle("Send", forState: .Normal)
-        sendButton.backgroundColor = UIColor.brownColor()
+        sendButton.backgroundColor = UIColor.blackColor()
         sendButton.addTarget(self, action: #selector(ComposeViewController.postStatus), forControlEvents: .TouchUpInside)
         
         //add to super
         view.addSubview(tweetText)
         view.addSubview(sendButton)
+        view.addSubview(sentNotif)
         
         Style.autoViews(view)
         self.activateConstraints()
@@ -40,8 +51,7 @@ class ComposeViewController: UIViewController, UIGestureRecognizerDelegate {
     
     func handleTap()
     {
-        print("tap")
-        view.endEditing(true)
+        sentNotif.hidden = true
     }
     
     func postStatus()
@@ -53,6 +63,10 @@ class ComposeViewController: UIViewController, UIGestureRecognizerDelegate {
         twitterClient.POST("1.1/statuses/update.json?status=\(message!)", parameters: nil , success: { (task: NSURLSessionDataTask, obj: AnyObject?) in
             print ("msg success")
             print(message)
+            self.tweetText.text = ""
+            self.sentNotif.hidden = false
+            self.view.endEditing(true)
+            
         }) { (task:NSURLSessionDataTask?, error:NSError) in
             print("msg failed")
             print(message)
@@ -73,6 +87,12 @@ class ComposeViewController: UIViewController, UIGestureRecognizerDelegate {
         NSLayoutConstraint(item: sendButton, attribute: .Right, relatedBy: .Equal, toItem: view, attribute: .RightMargin, multiplier: 1.0, constant: 0.0).active = true
         NSLayoutConstraint(item: sendButton, attribute: .Top, relatedBy: .Equal, toItem: tweetText, attribute: .Bottom, multiplier: 1.0, constant: 10.0).active = true
         NSLayoutConstraint(item: sendButton, attribute: .Height, relatedBy: .Equal, toItem: view, attribute: .Height, multiplier: 0.1, constant: 10.0).active = true
+        
+        //sentNotif
+        NSLayoutConstraint(item: sentNotif, attribute: .Left, relatedBy: .Equal, toItem: tweetText, attribute: .LeftMargin, multiplier: 1.0, constant: 0.0).active = true
+        NSLayoutConstraint(item: sentNotif, attribute: .Right, relatedBy: .Equal, toItem: tweetText, attribute: .RightMargin, multiplier: 1.0, constant: 0.0).active = true
+        NSLayoutConstraint(item: sentNotif, attribute: .Top, relatedBy: .Equal, toItem: tweetText, attribute: .TopMargin, multiplier: 1.0, constant: 0.0).active = true
+        NSLayoutConstraint(item: sentNotif, attribute: .Bottom, relatedBy: .Equal, toItem: tweetText, attribute: .Bottom, multiplier: 1.0, constant: 0.0).active = true
     }
 
 
